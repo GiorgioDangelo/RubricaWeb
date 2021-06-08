@@ -3,6 +3,7 @@ package it.rdev.rubrica.model.entities;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -30,7 +31,7 @@ public class Contact {
 	private String name;
 	@Column(name = "surname",  length = 50, nullable = false)
 	private String surname;
-	@OneToMany(mappedBy = "contact") //?? forse si riferisce al join della tabella contact con la tabella emails,e mette tutto in un set di dati
+	@OneToMany(mappedBy = "contact",cascade = CascadeType.ALL) //?? forse si riferisce al join della tabella contact con la tabella emails,e mette tutto in un set di dati
 	/**
      * (Optional) Whether to apply the remove operation to entities that have
      * been removed from the relationship and to cascade the remove operation to
@@ -38,7 +39,7 @@ public class Contact {
      * @sin*/
 	private Set<Email> emails;
 	//@OneToMany(mappedBy = "contact")
-	@OneToMany(mappedBy = "contact",fetch=FetchType.LAZY)//Con fetch lazy stiamo dicendo che 
+	@OneToMany(mappedBy = "contact",cascade = CascadeType.ALL)//Con fetch lazy stiamo dicendo che 
 	//quando facciamo la query estrai solo i contatti e non phone e emails
 	private Set<Phone> phones;
 	

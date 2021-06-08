@@ -11,6 +11,7 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Root;
 
 import it.rdev.rubrica.model.entities.Contact;
+import it.rdev.rubrica.model.entities.Email;
 import it.rdev.rubrica.model.util.DBUtil;
 
 public class ContactDao {
@@ -34,7 +35,20 @@ public class ContactDao {
 			em.close();
 		}
 	}
-
+	public static void insertEma(Email o) {
+		EntityManager em = DBUtil.getEntityManager(DBUtil.RUBRICA_WEB_PU);
+		EntityTransaction trans = em.getTransaction();
+		try {
+			trans.begin();
+			em.persist(o);
+			trans.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			trans.rollback();
+		} finally {
+			em.close();
+		}
+	}
 	public static void update(Contact c) {
 		EntityManager em = DBUtil.getEntityManager(DBUtil.RUBRICA_WEB_PU);
 		EntityTransaction trans = em.getTransaction();
@@ -53,6 +67,7 @@ public class ContactDao {
 	public static void delete(Contact c) {
 		EntityManager em = DBUtil.getEntityManager(DBUtil.RUBRICA_WEB_PU);
 		EntityTransaction trans = em.getTransaction();
+	
 		try {
 			trans.begin();
 			em.remove(em.merge(c));
@@ -64,7 +79,8 @@ public class ContactDao {
 			em.close();
 		}
 	}
-
+     
+	// Mi restituisco la tupla con quell'id se esiste
 	public static List<Contact> findByID_(Integer id) {
 		EntityManager em = DBUtil.getEntityManager(DBUtil.RUBRICA_WEB_PU);
 		String qString = "Select c from Contact c where c.id=:name";  //:name praticamente
@@ -81,6 +97,7 @@ public class ContactDao {
 		}
 		return contacts;
 	}
+	// Controllo se esiste la tupla con questo id e mi ritorno un valore booleano in cui mi dice se è stato trovato o meno
 	public static boolean findByID(Integer id) {
 		boolean valore=false;
 		EntityManager em = DBUtil.getEntityManager(DBUtil.RUBRICA_WEB_PU);

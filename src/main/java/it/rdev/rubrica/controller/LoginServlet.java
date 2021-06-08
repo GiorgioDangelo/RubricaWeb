@@ -52,10 +52,7 @@ public class LoginServlet extends HttpServlet {
 			session.invalidate();
 			
 		}
-		System.out.println("Home");
-		List <Contact> users=ContactDao.findAllCriteria();
-		request.setAttribute("users", users);
-		request.getRequestDispatcher("home.jsp").forward(request, response); // E vai in home
+		response.sendRedirect(request.getContextPath()+("/"));
 	}
 
 	/**

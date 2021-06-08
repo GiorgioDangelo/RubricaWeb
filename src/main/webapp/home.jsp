@@ -28,7 +28,7 @@
 		<tr>
 			<td><c:out value="${u.name }"></c:out></td>  <%--Inserisce in un colonna nome  --%>
 			<td><c:out value="${u.surname }"></c:out></td><%--e in questa colonna cognome --%>
-             <td><a href="DeleteServlet?id=<c:out value='${u.id}' />" >elimina</a></td>
+            <td><a href="secure/DeleteServlet?id=<c:out value='${u.id}' />" >elimina</a></td>
 			
 		</tr>
 	</c:forEach>

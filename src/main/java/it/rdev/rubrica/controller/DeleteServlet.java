@@ -16,7 +16,7 @@ import it.rdev.rubrica.model.entities.Contact;
 /**
  * Servlet implementation class DeleteServlet
  */
-@WebServlet("/DeleteServlet")
+@WebServlet("/secure/DeleteServlet")
 public class DeleteServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -37,12 +37,9 @@ public class DeleteServlet extends HttpServlet {
 		//Mi prendo l'id dell'utente e mi faccio restituire in una lista l'oggetto Contact
 		//con quell'id 
 		Integer id=Integer.parseInt(request.getParameter("id"));
-		List <Contact> users=ok.findByID_(id);
-		ok.delete(users.get(0));
-		//Mostro gli utente rimasti
-		List <Contact> show_users=ContactDao.findAllCriteria();
-		request.setAttribute("users", show_users);
-		request.getRequestDispatcher("home.jsp").forward(request, response);
+		List <Contact> delete_users=ok.findByID_(id);
+		ok.delete(delete_users.get(0));
+		response.sendRedirect(request.getContextPath()+("/"));
 	}
 
 	/**

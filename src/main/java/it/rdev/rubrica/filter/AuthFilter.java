@@ -1,6 +1,7 @@
 package it.rdev.rubrica.filter;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -10,6 +11,9 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import it.rdev.rubrica.model.ContactDao;
+import it.rdev.rubrica.model.entities.Contact;
 
 @WebFilter(urlPatterns = { "/secure/*" })
 public class AuthFilter extends HttpFilter {
