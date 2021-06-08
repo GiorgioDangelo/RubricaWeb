@@ -55,7 +55,7 @@ public class ContactDao {
 		EntityTransaction trans = em.getTransaction();
 		try {
 			trans.begin();
-			em.remove(c);
+			em.remove(em.merge(c));
 			trans.commit();
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -38,7 +38,6 @@ public class DeleteServlet extends HttpServlet {
 		//con quell'id 
 		Integer id=Integer.parseInt(request.getParameter("id"));
 		List <Contact> users=ok.findByID_(id);
-		System.out.println(users.get(0));
 		ok.delete(users.get(0));
 		//Mostro gli utente rimasti
 		List <Contact> show_users=ContactDao.findAllCriteria();
