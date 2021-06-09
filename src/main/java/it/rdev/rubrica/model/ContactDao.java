@@ -12,6 +12,7 @@ import javax.persistence.criteria.Root;
 
 import it.rdev.rubrica.model.entities.Contact;
 import it.rdev.rubrica.model.entities.Email;
+import it.rdev.rubrica.model.entities.Phone;
 import it.rdev.rubrica.model.util.DBUtil;
 
 public class ContactDao {
@@ -127,6 +128,7 @@ public class ContactDao {
 		String qString = "Select c from Contact c LEFT JOIN c.phones p";
 		TypedQuery<Contact> q = em.createQuery(qString, Contact.class);
 		List<Contact> contacts = null;
+		
 		try {
 			contacts = q.getResultList();
 		} catch (Exception e) {
@@ -135,6 +137,42 @@ public class ContactDao {
 			em.close();
 		}
 		return contacts;
+	}
+
+	
+	public static List<Email> dettagliEmail(Integer id) {
+		EntityManager em = DBUtil.getEntityManager(DBUtil.RUBRICA_WEB_PU);
+		String qString = "Select e from Contact c join c.emails e where c.id=:name";
+		//TypedQuery<Contact> q = em.createQuery(qString, Contact.class);
+		TypedQuery<Email> q = em.createQuery(qString, Email.class);
+		q.setParameter("name", id);
+		//List<Contact> contacts = null;
+		List<Email>emails =null;
+		try {
+			emails = q.getResultList();
+			
+		} catch (Exception e) {
+			System.out.println(e);
+		} finally {
+			em.close();
+		}
+		return emails;
+	}
+	public static List<Phone> dettagliPhone(Integer id) {
+		EntityManager em = DBUtil.getEntityManager(DBUtil.RUBRICA_WEB_PU);
+		String qString = "Select e from Contact c join c.phones e where c.id=:name";
+		TypedQuery<Phone> q = em.createQuery(qString, Phone.class);
+		q.setParameter("name", id);
+		List<Phone>cell =null;
+		try {
+			cell = q.getResultList();
+			
+		} catch (Exception e) {
+			System.out.println(e);
+		} finally {
+			em.close();
+		}
+		return cell;
 	}
 	
 	public static List<Contact> findAllNamedQuery() {
@@ -155,6 +193,29 @@ public class ContactDao {
 		Root<Contact> cont = c.from(Contact.class); //Create and add a query root corresponding to the given entity,
 		cont.fetch("phones", JoinType.LEFT); //Fa il join con la tabella phones
 		cont.fetch("emails", JoinType.LEFT); //Join con la tabella emails
+		c.select(cont).distinct(true);//Torna il risultato della query
+		TypedQuery<Contact> q = em.createQuery(c);
+		/**
+	     * Create an instance of <code>Query</code> for executing a criteria
+	     * update query.
+	     * @param updateQuery  a criteria update query object
+	     * @return the new query instance*/
+		return q.getResultList();
+	}
+	
+public static List<Contact> findAllData() { //Query con jpa
+		
+		// DBUtil.RUBRICA_WEB_PU è una stringa ed è RubricaWeb
+		EntityManager em = DBUtil.getEntityManager(DBUtil.RUBRICA_WEB_PU);//questo metodo ritorna un'instanza di entity manager (QUa si blocca)
+		//Che si riferisce all'inizializzazione della persistenza
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		/* CriteriaBuilder Return an instance of <code>Metamodel</code> interface for access to the
+     * metamodel of the persistence unit.*/
+		CriteriaQuery<Contact> c = cb.createQuery(Contact.class); // Create a <code>CriteriaQuery</code> object that returns a tuple of 
+	     // objects as its result.  Praticamente stiamo creando istanze per ogni tupla del database
+		Root<Contact> cont = c.from(Contact.class); //Create and add a query root corresponding to the given entity,
+		cont.fetch("phones", JoinType.INNER); //Fa il join con la tabella phones
+		cont.fetch("emails", JoinType.INNER); //Join con la tabella emails
 		c.select(cont).distinct(true);//Torna il risultato della query
 		TypedQuery<Contact> q = em.createQuery(c);
 		/**
